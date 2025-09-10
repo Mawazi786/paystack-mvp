@@ -22,9 +22,9 @@
             <h2>Select Payment Method</h2>
             <p>Your total is R <span id="modal-total-amount">0.00</span></p>
             <div class="modal-buttons">
-                <button onclick="handlePaymentChoice('paynow')">Pay Now</button>
-                <button onclick="handlePaymentChoice('pod')">Pay on Delivery</button>
-                <button class="cancel" onclick="handlePaymentChoice('cancel')">Cancel</button>
+                <button id="paynow-btn">Pay Now</button>
+                <button id="pod-btn">Pay on Delivery</button>
+                <button class="cancel" id="cancel-btn">Cancel</button>
             </div>
         </div>
     </div>
@@ -44,41 +44,41 @@
                             <h3>Organic Avocados (1kg)</h3>
                             <p>Price: R 75.00</p>
                             <div class="product-quantity">
-                                <button class="quantity-btn" onclick="decreaseQuantity('avocado')">-</button>
+                                <button class="quantity-btn" data-product="avocado" data-action="decrease">-</button>
                                 <input type="number" id="avocado-quantity" class="quantity-input" value="0" min="0" readonly>
-                                <button class="quantity-btn" onclick="increaseQuantity('avocado')">+</button>
+                                <button class="quantity-btn" data-product="avocado" data-action="increase">+</button>
                             </div>
-                            <button onclick="addToCart('avocado', 'Organic Avocados', 75)">Add to Cart</button>
+                            <button class="add-to-cart-btn" data-id="avocado" data-name="Organic Avocados" data-price="75">Add to Cart</button>
                         </div>
                         <div class="product">
                             <h3>Artisanal Sourdough Bread</h3>
                             <p>Price: R 45.00</p>
                             <div class="product-quantity">
-                                <button class="quantity-btn" onclick="decreaseQuantity('bread')">-</button>
+                                <button class="quantity-btn" data-product="bread" data-action="decrease">-</button>
                                 <input type="number" id="bread-quantity" class="quantity-input" value="0" min="0" readonly>
-                                <button class="quantity-btn" onclick="increaseQuantity('bread')">+</button>
+                                <button class="quantity-btn" data-product="bread" data-action="increase">+</button>
                             </div>
-                            <button onclick="addToCart('bread', 'Sourdough Bread', 45)">Add to Cart</button>
+                            <button class="add-to-cart-btn" data-id="bread" data-name="Sourdough Bread" data-price="45">Add to Cart</button>
                         </div>
                         <div class="product">
                             <h3>Free-Range Eggs (Dozen)</h3>
                             <p>Price: R 35.00</p>
                             <div class="product-quantity">
-                                <button class="quantity-btn" onclick="decreaseQuantity('eggs')">-</button>
+                                <button class="quantity-btn" data-product="eggs" data-action="decrease">-</button>
                                 <input type="number" id="eggs-quantity" class="quantity-input" value="0" min="0" readonly>
-                                <button class="quantity-btn" onclick="increaseQuantity('eggs')">+</button>
+                                <button class="quantity-btn" data-product="eggs" data-action="increase">+</button>
                             </div>
-                            <button onclick="addToCart('eggs', 'Free-Range Eggs', 35)">Add to Cart</button>
+                            <button class="add-to-cart-btn" data-id="eggs" data-name="Free-Range Eggs" data-price="35">Add to Cart</button>
                         </div>
                         <div class="product">
                             <h3>Fresh Strawberries (250g)</h3>
                             <p>Price: R 60.00</p>
                             <div class="product-quantity">
-                                <button class="quantity-btn" onclick="decreaseQuantity('strawberries')">-</button>
+                                <button class="quantity-btn" data-product="strawberries" data-action="decrease">-</button>
                                 <input type="number" id="strawberries-quantity" class="quantity-input" value="0" min="0" readonly>
-                                <button class="quantity-btn" onclick="increaseQuantity('strawberries')">+</button>
+                                <button class="quantity-btn" data-product="strawberries" data-action="increase">+</button>
                             </div>
-                            <button onclick="addToCart('strawberries', 'Fresh Strawberries', 60)">Add to Cart</button>
+                            <button class="add-to-cart-btn" data-id="strawberries" data-name="Fresh Strawberries" data-price="60">Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -97,10 +97,10 @@
                         <p>VAT (15%): R <span id="tax-amount">0.00</span></p>
                         <p><strong>Total: R <span id="grand-total">0.00</span></strong></p>
                     </div>
-                    <button onclick="checkout()" id="checkout-btn" disabled>Proceed to Checkout</button>
+                    <button id="checkout-btn" disabled>Proceed to Checkout</button>
                 </div>
 
-                <div class="card" id="card-form" style="display: none;">
+                <div class="card" id="card-form">
                     <h2>Enter Card Details</h2>
                     <div class="security-notice">
                         <i class="fas fa-lock"></i> Your payment information is encrypted and secure.
@@ -120,13 +120,13 @@
                             <input type="text" id="cardholder-name" placeholder="John Doe">
                         </div>
                         
-                        <div style="display: flex; gap: 15px;">
-                            <div class="form-group" style="flex: 1;">
+                        <div class="form-row">
+                            <div class="form-group">
                                 <label for="card-expiry">Expiry Date</label>
                                 <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
                             </div>
                             
-                            <div class="form-group" style="flex: 1;">
+                            <div class="form-group">
                                 <label for="card-cvv">CVV</label>
                                 <div class="card-input-container">
                                     <input type="text" id="card-cvv" placeholder="123" maxlength="3">
@@ -140,12 +140,12 @@
                             <input type="email" id="card-email" placeholder="your@email.com">
                         </div>
                         
-                        <button onclick="processPayment()">Verify & Process Payment</button>
-                        <button class="cancel" onclick="hideCardForm()">Cancel</button>
+                        <button id="process-payment-btn">Verify & Process Payment</button>
+                        <button class="cancel" id="cancel-payment-btn">Cancel</button>
                     </div>
                 </div>
 
-                <div class="card" id="verification-process" style="display: none;">
+                <div class="card" id="verification-process">
                     <h2>Payment Verification</h2>
                     <div class="verification-steps">
                         <div class="verification-step">
@@ -160,7 +160,7 @@
                             <span class="verification-icon" id="verification-icon-3">⏳</span>
                             <span>Processing transaction</span>
                         </div>
-                        <div class="verification-step" id="pod-step" style="display: none;">
+                        <div class="verification-step" id="pod-step">
                             <span class="verification-icon" id="verification-icon-4">⏳</span>
                             <span>Reserving funds for Pay on Delivery</span>
                         </div>
@@ -178,8 +178,8 @@
                     <div id="order-status" class="status-message info">
                         <p>Add items to your cart and proceed to checkout</p>
                     </div>
-                    <div id="delivery-section" style="display: none;">
-                        <button onclick="simulateDelivery()" id="deliver-btn">Complete Delivery & Capture Payment</button>
+                    <div id="delivery-section">
+                        <button id="deliver-btn">Complete Delivery & Capture Payment</button>
                     </div>
                 </div>
                 
@@ -187,16 +187,16 @@
                     <h2>Test Cards</h2>
                     <p>Use these test card numbers to simulate different scenarios:</p>
                     
-                    <div class="test-card" onclick="fillCard('4084084084084081', '12/30', '408')">
+                    <div class="test-card" data-number="4084084084084081" data-expiry="12/30" data-cvv="408">
                         <strong>4084 0840 8408 4081</strong> - Successful Transaction
                     </div>
-                    <div class="test-card" onclick="fillCard('4084080000000008', '12/30', '123')">
+                    <div class="test-card" data-number="4084080000000008" data-expiry="12/30" data-cvv="123">
                         <strong>4084 0800 0000 0008</strong> - Insufficient Funds
                     </div>
-                    <div class="test-card" onclick="fillCard('4123450000000009', '12/30', '123')">
+                    <div class="test-card" data-number="4123450000000009" data-expiry="12/30" data-cvv="123">
                         <strong>4123 4500 0000 0009</strong> - Do Not Honor
                     </div>
-                    <div class="test-card" onclick="fillCard('4123450000000017', '12/30', '123')">
+                    <div class="test-card" data-number="4123450000000017" data-expiry="12/30" data-cvv="123">
                         <strong>4123 4500 0000 0017</strong> - Invalid Transaction
                     </div>
                 </div>
