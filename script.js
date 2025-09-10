@@ -30,6 +30,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         e.target.value = value;
     });
+    
+    // Add event listeners for quantity buttons
+    document.querySelectorAll('.quantity-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const product = this.getAttribute('data-product');
+            const action = this.getAttribute('data-action');
+            
+            if (action === 'increase') {
+                increaseQuantity(product);
+            } else {
+                decreaseQuantity(product);
+            }
+        });
+    });
+    
+    // Add event listeners for add to cart buttons
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+            const price = parseFloat(this.getAttribute('data-price'));
+            addToCart(id, name, price);
+        });
+    });
+    
+    // Add event listeners for modal buttons
+    document.getElementById('paynow-btn').addEventListener('click', function() {
+        handlePaymentChoice('paynow');
+    });
+    
+    document.getElementById('pod-btn').addEventListener('click', function() {
+        handlePaymentChoice('pod');
+    });
+    
+    document.getElementById('cancel-btn').addEventListener('click', function() {
+        handlePaymentChoice('cancel');
+    });
+    
+    // Add event listener for checkout button
+    document.getElementById('checkout-btn').addEventListener('click', checkout);
+    
+    // Add event listeners for payment form buttons
+    document.getElementById('process-payment-btn').addEventListener('click', processPayment);
+    document.getElementById('cancel-payment-btn').addEventListener('click', hideCardForm);
+    
+    // Add event listener for delivery button
+    document.getElementById('deliver-btn').addEventListener('click', simulateDelivery);
+    
+    // Add event listeners for test cards
+    document.querySelectorAll('.test-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const number = this.getAttribute('data-number');
+            const expiry = this.getAttribute('data-expiry');
+            const cvv = this.getAttribute('data-cvv');
+            fillCard(number, expiry, cvv);
+        });
+    });
+    
+    // Close modal if user clicks outside of it
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('paymentOptionsModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
 });
 
 // Modal functions
@@ -40,14 +105,6 @@ function showModal() {
 
 function closeModal() {
     document.getElementById('paymentOptionsModal').style.display = 'none';
-}
-
-// Close modal if user clicks outside of it
-window.onclick = function(event) {
-    const modal = document.getElementById('paymentOptionsModal');
-    if (event.target === modal) {
-        closeModal();
-    }
 }
 
 // Product quantity functions
@@ -141,10 +198,10 @@ function updateCartDisplay() {
                 <div>R ${item.price.toFixed(2)} each</div>
             </div>
             <div class="cart-item-quantity">
-                <button class="quantity-btn" onclick="updateCartItemQuantity('${item.id}', -1)">-</button>
+                <button class="quantity-btn" data-product="${item.id}" data-action="decrease">-</button>
                 <span>${item.quantity}</span>
-                <button class="quantity-btn" onclick="updateCartItemQuantity('${item.id}', 1)">+</button>
-                <span class="remove-item" onclick="removeFromCart('${item.id}')">
+                <button class="quantity-btn" data-product="${item.id}" data-action="increase">+</button>
+                <span class="remove-item" data-product="${item.id}">
                     <i class="fas fa-trash"></i>
                 </span>
             </div>
@@ -153,6 +210,22 @@ function updateCartDisplay() {
             </div>
         </div>
     `).join('');
+
+    // Add event listeners to the new buttons
+    document.querySelectorAll('.cart-item-quantity button').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product');
+            const action = this.getAttribute('data-action');
+            updateCartItemQuantity(productId, action === 'increase' ? 1 : -1);
+        });
+    });
+    
+    document.querySelectorAll('.remove-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product');
+            removeFromCart(productId);
+        });
+    });
 
     // Calculate totals
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
