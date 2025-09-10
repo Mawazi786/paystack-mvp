@@ -392,6 +392,15 @@ button.secondary:hover {
     font-size: 16px;
 }
 
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
 .card-input-container {
     position: relative;
 }
@@ -466,6 +475,13 @@ button.secondary:hover {
     color: #ddd;
 }
 
+#card-form,
+#verification-process,
+#delivery-section,
+#pod-step {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .flex-container {
         flex-direction: column;
@@ -484,5 +500,10 @@ button.secondary:hover {
         margin-top: 10px;
         width: 100%;
         justify-content: space-between;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
     }
 }
